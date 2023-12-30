@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -456,9 +457,6 @@ static void __init init_custom_cmds(void)
 
 static int __init clkdbg_mt6873_init(void)
 {
-	if (!of_machine_is_compatible("mediatek,MT6873"))
-		return -ENODEV;
-
 	init_regbase();
 
 	init_custom_cmds();

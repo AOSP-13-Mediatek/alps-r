@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -64,7 +65,13 @@ enum FH_DEVCTL_CMD_ID {
 	FH_DCTL_CMD_GET_INIT_STATUS = 0x100D,
 	FH_DCTL_CMD_PLL_PAUSE = 0x100E,
 #endif
-	FH_DCTL_CMD_MAX
+	FH_DCTL_CMD_MAX,
+	FH_DBG_CMD_TR_BEGIN_LOW = 0x2001,
+	FH_DBG_CMD_TR_BEGIN_HIGH = 0x2002,
+	FH_DBG_CMD_TR_END_LOW = 0x2003,
+	FH_DBG_CMD_TR_END_HIGH = 0x2004,
+	FH_DBG_CMD_TR_ID = 0x2005,
+	FH_DBG_CMD_TR_VAL = 0x2006,
 };
 
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -364,6 +365,8 @@ enum MTK_CRTC_PROP {
 	CRTC_PROP_COLOR_TRANSFORM,
 	CRTC_PROP_USER_SCEN,
 	CRTC_PROP_HDR_ENABLE,
+	CRTC_PROP_ICON_ENABLE,
+	CRTC_PROP_ENROLL_ENABLE,
 	CRTC_PROP_MAX,
 };
 
@@ -479,6 +482,7 @@ struct mtk_crtc_path_data {
 	//for dual path
 	const enum mtk_ddp_comp_id *dual_path[DDP_PATH_NR];
 	unsigned int dual_path_len[DDP_PATH_NR];
+	const struct mtk_addon_scenario_data *addon_data_dual;
 };
 
 struct mtk_crtc_gce_obj {
@@ -588,6 +592,8 @@ struct mtk_drm_crtc {
 	struct mtk_drm_esd_ctx *esd_ctx;
 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
 	struct mtk_drm_gem_obj *round_corner_gem;
+	struct mtk_drm_gem_obj *round_corner_gem_l;
+	struct mtk_drm_gem_obj *round_corner_gem_r;
 #endif
 	struct mtk_drm_qos_ctx *qos_ctx;
 	bool sec_on;
@@ -629,6 +635,10 @@ struct mtk_drm_crtc {
 	wait_queue_head_t state_wait_queue;
 	bool crtc_blank;
 	struct mutex blank_lock;
+
+	wait_queue_head_t present_fence_wq;
+	struct task_struct *pf_release_thread;
+	atomic_t pf_event;
 };
 
 struct mtk_crtc_state {
@@ -643,6 +653,7 @@ struct mtk_crtc_state {
 	struct mtk_lye_ddp_state lye_state;
 	struct mtk_rect rsz_src_roi;
 	struct mtk_rect rsz_dst_roi;
+	struct mtk_rsz_param rsz_param[2];
 	atomic_t plane_enabled_num;
 
 	/* property */
@@ -772,6 +783,12 @@ bool mtk_drm_get_hdr_property(void);
 int mtk_drm_aod_setbacklight(struct drm_crtc *crtc, unsigned int level);
 
 int mtk_drm_crtc_wait_blank(struct mtk_drm_crtc *mtk_crtc);
+void mtk_drm_crtc_init_para(struct drm_crtc *crtc);
+void mtk_drm_layer_dispatch_to_dual_pipe(
+	struct mtk_plane_state *plane_state,
+	struct mtk_plane_state *plane_state_l,
+	struct mtk_plane_state *plane_state_r,
+	unsigned int w);
 /* ********************* Legacy DISP API *************************** */
 unsigned int DISP_GetScreenWidth(void);
 unsigned int DISP_GetScreenHeight(void);

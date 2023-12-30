@@ -1,4 +1,5 @@
 /* Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -535,7 +536,7 @@ int msdc_get_ccf_clk_pointer(struct platform_device *pdev,
 				pdev->id);
 			return 1;
 		}
-		if (clk_prepare(host->clk_ctl)) {
+		if (clk_prepare_enable(host->clk_ctl)) {
 			pr_notice("[msdc%d] cannot prepare clk ctrl\n",
 				pdev->id);
 			return 1;
@@ -550,7 +551,7 @@ int msdc_get_ccf_clk_pointer(struct platform_device *pdev,
 				pdev->id);
 			return 1;
 		}
-		if (clk_prepare(host->hclk_ctl)) {
+		if (clk_prepare_enable(host->hclk_ctl)) {
 			pr_notice("[msdc%d] cannot prepare hclk ctrl\n",
 				pdev->id);
 			return 1;
@@ -572,7 +573,7 @@ int msdc_get_ccf_clk_pointer(struct platform_device *pdev,
 			WARN_ON(1);
 			return 1;
 		}
-		if (clk_prepare(host->aes_clk_ctl)) {
+		if (clk_prepare_enable(host->aes_clk_ctl)) {
 			pr_notice(
 				"[msdc%d] can not prepare aes clock control\n",
 				pdev->id);

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -35,6 +36,11 @@
 /*Define for DLPT*/
 #define DISABLE_DLPT_FEATURE
 #endif /* defined(CONFIG_FPGA_EARLY_PORTING) || PT_DLPT_BRINGUP */
+
+//#define DISABLE_LOW_BATTERY_PROTECT
+#define DISABLE_BATTERY_OC_PROTECT
+#define DISABLE_BATTERY_PERCENT_PROTECT
+#define DISABLE_DLPT_FEATURE
 
 #define POWER_UVLO_VOLT_LEVEL 2600
 #define IMAX_MAX_VALUE 5500

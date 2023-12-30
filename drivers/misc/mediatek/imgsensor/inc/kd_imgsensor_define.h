@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -281,6 +282,7 @@ enum ACDK_SENSOR_FEATURE_ENUM {
 	SENSOR_FEATURE_GET_PERIOD_BY_SCENARIO,
 	SENSOR_FEATURE_GET_BINNING_TYPE,
 	SENSOR_FEATURE_GET_Y_AVERAGE,
+    SENSOR_FEATURE_GET_HS_TRAIL,
 	SENSOR_FEATURE_GET_GAIN_RANGE_BY_SCENARIO,
 	SENSOR_FEATURE_GET_BASE_GAIN_ISO_AND_STEP,
 	SENSOR_FEATURE_GET_MIN_SHUTTER_BY_SCENARIO,

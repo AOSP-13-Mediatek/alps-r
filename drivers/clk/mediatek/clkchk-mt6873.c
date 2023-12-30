@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -690,9 +691,6 @@ static struct syscore_ops clkchk_syscore_ops = {
 
 static int __init clkchk_init(void)
 {
-	if (!of_machine_is_compatible("mediatek,MT6873"))
-		return -ENODEV;
-
 	register_syscore_ops(&clkchk_syscore_ops);
 
 	return 0;

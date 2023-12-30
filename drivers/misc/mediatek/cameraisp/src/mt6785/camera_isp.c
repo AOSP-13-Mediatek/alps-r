@@ -3769,7 +3769,7 @@ static long ISP_ioctl(struct file *pFile,
 	case ISP_GET_CUR_ISP_CLOCK:
 		{
 			struct ISP_GET_CLK_INFO getclk;
-			unsigned int clk[2];
+			unsigned int clk[2] = {0, 0};
 
 			ISP_SetPMQOS(E_CLK_CUR, ISP_IRQ_TYPE_INT_CAM_A_ST, clk);
 			getclk.curClk = clk[0];
@@ -5367,7 +5367,7 @@ EXIT:
 static int ISP_mmap(struct file *pFile, struct vm_area_struct *pVma)
 {
 	unsigned long length = 0;
-	unsigned int pfn = 0x0;
+	unsigned long pfn = 0x0;
 
 	/*LOG_DBG("- E.");*/
 	length = (pVma->vm_end - pVma->vm_start);

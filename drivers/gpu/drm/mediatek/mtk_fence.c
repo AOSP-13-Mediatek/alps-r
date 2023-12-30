@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -210,14 +211,15 @@ struct mtk_fence_info *_disp_sync_get_sync_info(unsigned int session_id,
 	struct mtk_fence_info *layer_info = NULL;
 	struct mtk_fence_session_sync_info *session_info =
 		_get_session_sync_info(session_id);
+	int prl = printk_ratelimit();
 
 	mutex_lock(&_disp_fence_mutex);
 	if (session_info) {
 		if (timeline_id >=
 		    sizeof(session_info->session_layer_info) /
 			    sizeof(session_info->session_layer_info[0])) {
-
-			DDPPR_ERR("invalid timeline_id:%d\n", timeline_id);
+			if (prl)
+				DDPPR_ERR("invalid timeline_id:%d\n", timeline_id);
 			goto done;
 		} else {
 			layer_info = &(
@@ -226,14 +228,16 @@ struct mtk_fence_info *_disp_sync_get_sync_info(unsigned int session_id,
 	}
 
 	if (layer_info == NULL || session_info == NULL) {
-		DDPPR_ERR(
+		if (prl)
+			DDPPR_ERR(
 			"cant get sync info for session_id:0x%08x, timeline_id:%d\n",
 			session_id, timeline_id);
 		goto done;
 	}
 
 	if (layer_info->inited == 0) {
-		DDPPR_ERR("layer_info[%d] not inited\n", timeline_id);
+		if (prl)
+			DDPPR_ERR("layer_info[%d] not inited\n", timeline_id);
 		goto done;
 	}
 
@@ -525,20 +529,22 @@ int mtk_release_present_fence(unsigned int session_id, unsigned int fence_idx)
 	struct mtk_fence_info *layer_info = NULL;
 	unsigned int timeline_id = 0;
 	int fence_increment = 0;
+	unsigned int idx;
 
 	timeline_id = mtk_fence_get_present_timeline_id(session_id);
 	layer_info = _disp_sync_get_sync_info(session_id, timeline_id);
 	if (layer_info == NULL) {
-		DDPPR_ERR("%s:%d layer_info is null\n", __func__, __LINE__);
+		if (printk_ratelimit())
+			DDPPR_ERR("%s:%d layer_info is null\n", __func__, __LINE__);
 		return -1;
 	}
 
 	mutex_lock(&layer_info->sync_lock);
 
-	mtk_drm_trace_begin("present_fence_rel:%s-%d",
-		mtk_fence_session_mode_spy(session_id), fence_idx);
-
 	fence_increment = fence_idx - layer_info->timeline->value;
+
+	if (fence_increment <= 0)
+		goto done;
 
 	if (fence_increment >= 2)
 		DDPFENCE("Warning, R/%s%d/L%d/timeline idx:%d/fence:%d\n",
@@ -546,18 +552,26 @@ int mtk_release_present_fence(unsigned int session_id, unsigned int fence_idx)
 			 MTK_SESSION_DEV(session_id), timeline_id,
 			 layer_info->timeline->value, fence_idx);
 
-	if (fence_increment > 0) {
-		mtk_sync_timeline_inc(layer_info->timeline, fence_increment);
-		DDPFENCE("RL+/%s%d/T%d/id%d\n",
-			 mtk_fence_session_mode_spy(session_id),
-			 MTK_SESSION_DEV(session_id), timeline_id, fence_idx);
-	}
+	mtk_drm_trace_begin("present_fence_rel:%s-%d",
+		mtk_fence_session_mode_spy(session_id), fence_idx);
 
-	/* print mmp log for primary display */
+	mtk_sync_timeline_inc(layer_info->timeline, fence_increment);
+	DDPFENCE("RL+/%s%d/T%d/id%d\n",
+		 mtk_fence_session_mode_spy(session_id),
+		 MTK_SESSION_DEV(session_id), timeline_id, fence_idx);
+
 	if (MTK_SESSION_TYPE(session_id) == MTK_SESSION_PRIMARY)
-		CRTC_MMP_MARK(0, release_present_fence, 0, fence_idx);
+		idx = 0;
+	else if (MTK_SESSION_TYPE(session_id) == MTK_SESSION_EXTERNAL)
+		idx = 1;
+	else
+		idx = 2;
+
+	CRTC_MMP_MARK(idx, release_present_fence, 0, fence_idx);
 
 	mtk_drm_trace_end();
+
+done:
 	mutex_unlock(&layer_info->sync_lock);
 	return 0;
 }
@@ -587,8 +601,8 @@ int mtk_fence_get_present_timeline_id(unsigned int session_id)
 		return MTK_TIMELINE_PRIMARY_PRESENT_TIMELINE_ID;
 	if (MTK_SESSION_TYPE(session_id) == MTK_SESSION_EXTERNAL)
 		return MTK_TIMELINE_SECONDARY_PRESENT_TIMELINE_ID;
-
-	DDPPR_ERR("session id is wrong, session=0x%x!!\n", session_id);
+	if (printk_ratelimit())
+		DDPPR_ERR("session id is wrong, session=0x%x!!\n", session_id);
 	return -1;
 }
 

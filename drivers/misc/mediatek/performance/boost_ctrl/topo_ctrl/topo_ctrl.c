@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -52,6 +53,16 @@ int topo_ctrl_get_nr_clusters(void)
 #endif
 }
 EXPORT_SYMBOL(topo_ctrl_get_nr_clusters);
+
+int topo_ctrl_get_cluster_cpu_id(int id)
+{
+	if (id < 0 || id >= NR_PPM_CLUSTERS)
+		return -1;
+
+	return topo_cluster_info[id].cpu_id;
+}
+EXPORT_SYMBOL(topo_ctrl_get_cluster_cpu_id);
+
 
 /***************************************/
 static void topo_platform_init(void)

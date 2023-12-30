@@ -2,6 +2,7 @@
  * Block driver for media (i.e., flash cards)
  *
  * Copyright 2002 Hewlett-Packard Company
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Copyright 2005-2008 Pierre Ossman
  *
  * Use consistent with the GNU GPL version 2 is permitted,
@@ -2684,7 +2685,7 @@ static struct mmc_cmdq_req *mmc_blk_cmdq_rw_prep(
 	 * call it in CQHCI for safe, SWcmdq will do this in
 	 * mmc_blk_swcq_issue_rw_rq().
 	 */
-#ifndef CONFIG_MTK_EMMC_CQ_SUPPORT
+#ifdef CONFIG_MTK_EMMC_HW_CQ
 	mmc_crypto_prepare_req(mqrq);
 #endif
 #ifdef MMC_CQHCI_DEBUG

@@ -3,6 +3,7 @@
  * Android IPC Subsystem
  *
  * Copyright (C) 2007-2008 Google, Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -4274,6 +4275,11 @@ err_alloc_tcomplete_failed:
 	binder_cancel_bwdog(t);
 #endif
 #ifdef BINDER_USER_TRACKING
+	if (t->code) {
+		binder_debug(BINDER_DEBUG_FAILED_TRANSACTION,
+			     "%d:%d transaction %d failed code: %x",
+			      proc->pid, thread->pid, t->debug_id, t->code);
+	}
 	binder_print_delay(t);
 #endif
 	kfree(t);

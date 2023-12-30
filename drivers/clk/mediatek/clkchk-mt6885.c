@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -1203,9 +1204,6 @@ static int __init clkchk_init(void)
 {
 	/* fill the 'struct clk *' ptr of every CGs*/
 	int i;
-
-	if (!of_machine_is_compatible("mediatek,MT6885"))
-		return -ENODEV;
 
 	register_syscore_ops(&clkchk_syscore_ops);
 

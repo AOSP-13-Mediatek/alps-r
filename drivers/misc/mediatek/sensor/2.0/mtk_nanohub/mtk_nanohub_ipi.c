@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -17,11 +18,15 @@
 #include <linux/workqueue.h>
 #include <linux/spinlock.h>
 #include <linux/delay.h>
+#include <linux/timekeeping.h>
 
 #include "mtk_nanohub_ipi.h"
 #include "scp_ipi.h"
 #include "scp_helper.h"
 #include "scp_excep.h"
+
+static s64 last_recovery_time;
+static u8 recovery_remains;
 
 enum scp_ipi_status __attribute__((weak)) scp_ipi_send(enum ipi_id id,
 		void *buf, unsigned int  len,
@@ -59,6 +64,7 @@ static int ipi_txrx_bufs(struct ipi_transfer *t)
 	int timeout;
 	unsigned long flags;
 	struct ipi_hw_transfer *hw = &hw_transfer;
+	s64 now_time =0;
 
 	spin_lock_irqsave(&hw_transfer_lock, flags);
 	hw->tx = t->tx_buf;
@@ -93,8 +99,17 @@ static int ipi_txrx_bufs(struct ipi_transfer *t)
 			msecs_to_jiffies(500));
 	spin_lock_irqsave(&hw_transfer_lock, flags);
 	if (!timeout) {
-		pr_err("transfer timeout!");
+		pr_err("transfer timeout, recovery_remains:%u\n!", recovery_remains);
 		hw->count = -1;
+		now_time = ktime_get_boot_ns();
+		if (now_time - last_recovery_time > 2000000000
+			&& recovery_remains > 0) {
+			recovery_remains--;
+			last_recovery_time = now_time;
+			scp_wdt_reset(0);
+		}
+	} else {
+		recovery_remains = 10;
 	}
 	hw->context = NULL;
 	spin_unlock_irqrestore(&hw_transfer_lock, flags);
@@ -254,6 +269,7 @@ int mtk_nanohub_ipi_init(void)
 		return -1;
 	}
 
+	recovery_remains = 10;
 	return 0;
 }
 

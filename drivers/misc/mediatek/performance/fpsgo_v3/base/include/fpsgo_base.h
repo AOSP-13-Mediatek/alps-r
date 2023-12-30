@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -24,7 +25,7 @@
 #include <linux/workqueue.h>
 
 #define WINDOW 20
-#define RESCUE_TIMER_NUM 2
+#define RESCUE_TIMER_NUM 3
 
 /* EARA job type */
 enum HW_EVENT4RENDER {

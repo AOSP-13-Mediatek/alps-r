@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -66,7 +67,6 @@ struct reg_config {
 };
 
 struct helio_dvfsrc {
-	struct devfreq		*devfreq;
 	int irq;
 	struct device *dev;
 	bool qos_enabled;

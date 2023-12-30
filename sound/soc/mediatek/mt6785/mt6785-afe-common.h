@@ -3,6 +3,7 @@
  * mt6785-afe-common.h  --  Mediatek 6785 audio driver definitions
  *
  * Copyright (c) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Author: Eason Yen <eason.yen@mediatek.com>
  */
 
@@ -71,6 +72,7 @@ enum {
 	MT6785_DAI_HOSTLESS_UL3,
 	MT6785_DAI_HOSTLESS_UL6,
 	MT6785_DAI_HOSTLESS_DSP_DL,
+	MT6785_DAI_EXP_HP,
 	MT6785_DAI_NUM,
 };
 

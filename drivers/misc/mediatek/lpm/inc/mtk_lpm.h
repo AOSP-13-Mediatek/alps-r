@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Copyright (c) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #ifndef __MTK_LP_MODULE_H__
@@ -19,6 +20,7 @@
 #define MTK_LP_REQ_NOBROADCAST		(1<<1L)
 #define MTK_LP_REQ_NOSUSPEND		(1<<2L)
 #define MTK_LP_REQ_NOSYSCORE_CB		(1<<3L)
+#define MTK_LP_PREPARE_FAIL		(1<<4L)
 
 enum MT_LPM_ISSUER_TYPE {
 	MT_LPM_ISSUER_SUSPEND,

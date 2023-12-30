@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -105,7 +106,7 @@
 
 #define PROC_ENTRY(name)	{__stringify(name), &name ## _proc_fops}
 
-#define PICACHU_PROC_ENTRY_ATTR (0664)
+#define PICACHU_PROC_ENTRY_ATTR (0440)
 
 struct picachu_info {
 	union {

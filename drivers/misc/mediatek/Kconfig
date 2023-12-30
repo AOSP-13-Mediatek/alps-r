@@ -293,6 +293,7 @@ source "drivers/misc/mediatek/flashlight/richtek/Kconfig"
 source "drivers/misc/mediatek/scp/Kconfig"
 source "drivers/misc/mediatek/leds/Kconfig"
 source "drivers/misc/mediatek/irtx/Kconfig"
+source "drivers/misc/mediatek/aw8622_haptic/Kconfig"
 source "drivers/misc/mediatek/pwm/Kconfig"
 source "drivers/misc/mediatek/systracker/Kconfig"
 source "drivers/misc/mediatek/boot/Kconfig"
@@ -421,6 +422,19 @@ config MTK_GCOV_KERNEL
 	  It depends on GCOV_KERNEL
 	  Select "Y" if you want to use.
 	  Select "N" if you are not sure.
+
+config XIAOMI_MOTOR_DRV8846
+	bool "xiaomi MOTOR DRV8846 ENABLE"
+	default n
+	help
+	  Say Y here if you want to enable TI-drv8846 Stepper motor
+
+config XIAOMI_AKM09970
+	tristate "AKM HALL sensor driver"
+	depends on I2C_MTK
+	help
+	  Say 'y' here to include support for
+	  driver provides an API to drive hall sensor.
 
 source "drivers/misc/mediatek/freqhopping/Kconfig"
 source "drivers/misc/mediatek/sspm/Kconfig"

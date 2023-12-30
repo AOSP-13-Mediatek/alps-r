@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -552,13 +553,7 @@ int mt_spower_init(void)
 			spower_lkg_info[i].value =
 				(int)(temp_lkg * spower_lkg_info[i].v_of_fuse);
 		}
-		/*
-		 * Fix Me
-		 */
-#if defined(CONFIG_MACH_MT6893) || defined(TRIGEAR_LEAKAGE)
-		if (i == MTK_B_LEAKAGE)
-			spower_lkg_info[i].value *= 0.47;
-#endif
+
 		SPOWER_INFO("[Efuse Leakage] %s => 0x%x\n",
 			    spower_lkg_info[i].name, temp_lkg);
 		SPOWER_INFO("[Final Leakage] %s => %d\n",
@@ -641,7 +636,7 @@ int mt_spower_get_leakage(int dev, unsigned int vol, int deg)
 {
 	int ret;
 
-	if (!tab_validate(&sptab[dev]))
+	if (dev < 0 || !tab_validate(&sptab[dev]))
 		return 0;
 
 	if (vol > mV(&sptab[dev], VSIZE - 1))

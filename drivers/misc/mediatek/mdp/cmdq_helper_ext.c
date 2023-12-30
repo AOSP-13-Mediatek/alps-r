@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -4031,6 +4032,7 @@ s32 cmdq_pkt_copy_cmd(struct cmdqRecStruct *handle, void *src, const u32 size,
 	struct cmdq_pkt *pkt = handle->pkt;
 	void *va;
 	struct cmdq_pkt_buffer *buf;
+	u64 exec_cost = sched_clock();
 
 	while (remaind_cmd_size > 0) {
 		/* extend buffer to copy more instruction */
@@ -4075,6 +4077,10 @@ s32 cmdq_pkt_copy_cmd(struct cmdqRecStruct *handle, void *src, const u32 size,
 			pkt->buf_size, pkt->cmd_buf_size, pkt->avail_buf_size,
 			handle->cmd_end, va);
 	}
+
+	exec_cost = div_s64(sched_clock() - exec_cost, 1000);
+	if (exec_cost > 1000)
+		CMDQ_LOG("[warn]%s > 1ms cost:%lluus\n", __func__, exec_cost);
 
 	return status;
 }
@@ -4480,6 +4486,7 @@ s32 cmdq_pkt_wait_flush_ex_result(struct cmdqRecStruct *handle)
 				CMDQ_ERR(
 					"task may not execute handle:%p pkt:%p exec:%#x %#x",
 					handle, handle->pkt, va[0], va[1]);
+				cmdq_dump_pkt(handle->pkt, 0, true);
 			} else {
 				u32 cost = va[1] < va[0] ?
 					~va[0] + va[1] : va[1] - va[0];

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -23,9 +24,13 @@
 #else
 #define SCP_LOGGER_ENABLE                (0)
 #endif
+#define SCP_LOGGER_OVERWRITE             (1)
 #define SCP_DVFS_INIT_ENABLE             (1)
 #define SCP_VOW_LOW_POWER_MODE           (1)
 
+#ifdef SCP_LOGGER_OVERWRITE
+#define HW_SEM_LOGGER                    (1)
+#endif
 
 /* scp rescovery feature option*/
 #define SCP_RECOVERY_SUPPORT             (1)
@@ -41,7 +46,11 @@
 #define SCP_REGISTER_SUB_SENSOR          (1)
 
 /* emi mpu define*/
+#ifdef CONFIG_MEDIATEK_EMI
 #define ENABLE_SCP_EMI_PROTECTION        (1)
+#else
+#define ENABLE_SCP_EMI_PROTECTION        (0)
+#endif
 
 #define MPU_REGION_ID_SCP_SMEM           7
 #define MPU_DOMAIN_D0                    0

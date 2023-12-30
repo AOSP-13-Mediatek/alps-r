@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -184,6 +185,10 @@ static void mt6358_irq_sp_handler(struct mt6358_chip *chip,
 				sta_reg, sp_int_status,
 				pmic_irqs[hwirq].name, hwirq,
 				irq_get_trigger_type(virq));
+			if (!strncmp(pmic_irqs[hwirq].name, "chrdet_edge", 11)) {
+				regmap_write(chip->regmap, sta_reg, BIT(j));
+				sp_int_status &= ~BIT(j);
+			}
 			log_threaded_irq_wakeup_reason(virq, chip->irq);
 			if (virq)
 				handle_nested_irq(virq);

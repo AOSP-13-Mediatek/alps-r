@@ -58,7 +58,7 @@
 		skip_cnt++;\
 } while (0)\
 
-int increase_stop_threshold = 1;
+int increase_stop_threshold;
 module_param(increase_stop_threshold, int, 0644);
 /* return the estimated delay based on USB frame counters */
 snd_pcm_uframes_t snd_usb_pcm_delay(struct snd_usb_substream *subs,
@@ -109,7 +109,7 @@ static snd_pcm_uframes_t snd_usb_pcm_pointer(struct snd_pcm_substream *substream
 						substream->runtime->rate);
 
 	/* show notification if stop_threshold has been disabled */
-	if (substream->runtime->stop_threshold >
+	if (substream->runtime->stop_threshold >=
 			substream->runtime->buffer_size) {
 		snd_pcm_uframes_t avail;
 		struct snd_pcm_runtime *runtime = substream->runtime;
@@ -827,12 +827,12 @@ static int snd_usb_hw_params(struct snd_pcm_substream *substream,
 	/* add the qos request and set the latency */
 	if (pm_qos_request_active(&subs->pm_qos)) {
 		pm_qos_update_request(&subs->pm_qos,
-					US_PER_FRAME * PM_QOS_COUNT);
+					US_PER_FRAME);
 		pr_info("%s: (pm_qos @%p) update\n",
 			   __func__, &subs->pm_qos);
 	} else {
 		pm_qos_add_request(&subs->pm_qos,
-			   PM_QOS_CPU_DMA_LATENCY, US_PER_FRAME * PM_QOS_COUNT);
+			   PM_QOS_CPU_DMA_LATENCY, US_PER_FRAME);
 		pr_info("%s: (pm_qos @%p) request\n",
 			   __func__, &subs->pm_qos);
 	}

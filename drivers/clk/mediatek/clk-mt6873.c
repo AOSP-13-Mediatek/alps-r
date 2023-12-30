@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -3765,7 +3766,7 @@ static int mtk_clk_rate_change(struct notifier_block *nb,
 
 	int vcore_opp = get_sw_req_vcore_opp();
 
-	if (flags == PRE_RATE_CHANGE) {
+	if (flags == PRE_RATE_CHANGE && clk_name) {
 		warn_vcore(vcore_opp, clk_name,
 			ndata->new_rate, mtk_mux2id(&clk_name));
 	}
@@ -4419,7 +4420,7 @@ void pll_if_on(void)
 	if (ret > 0) {
 #ifdef CONFIG_MTK_ENG_BUILD
 		print_enabled_clks_once();
-		BUG_ON(1);
+		//BUG_ON(1);
 #else
 		aee_kernel_warning("CCF MT6873",
 			"@%s():%d, PLLs are not off\n", __func__, __LINE__);

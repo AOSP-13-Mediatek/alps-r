@@ -2,6 +2,7 @@
  * Universal Flash Storage Turbo Write
  *
  * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Authors:
  *	Yongmyung Lee <ymhungry.lee@samsung.com>
@@ -1506,7 +1507,7 @@ static ssize_t ufstw_sysfs_show_##_name(struct ufstw_lu *tw, char *buf) \
 /* SYSFS FUNCTION */
 define_sysfs_attr_r_function(flush_status, QUERY_ATTR_IDN_TW_FLUSH_STATUS)
 define_sysfs_attr_r_function(available_buffer_size, QUERY_ATTR_IDN_TW_BUF_SIZE)
-define_sysfs_attr_r_function(current_tw_buffer_size, QUERY_ATTR_CUR_TW_BUF_SIZE)
+define_sysfs_attr_r_function(current_tw_buffer_size, QUERY_ATTR_IDN_TW_CUR_BUF_SIZE)
 define_sysfs_attr_r_function(lifetime_est, QUERY_ATTR_IDN_TW_BUF_LIFETIME_EST)
 
 static ssize_t ufstw_sysfs_show_tw_enable(struct ufstw_lu *tw, char *buf)

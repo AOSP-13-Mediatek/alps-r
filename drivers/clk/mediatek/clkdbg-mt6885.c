@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -423,7 +424,7 @@ static struct devapc_vio_callbacks devapc_vio_handle = {
 /******************* TOPCKGEN Subsys *******************************/
 void warn_vcore(int opp, const char *clk_name, int rate, int id)
 {
-#if defined(CONFIG_MACH_MT6893) || defined(CONFIG_MTK_DVFSRC_MT6893_PRETEST)
+#if defined(CONFIG_MACH_MT6893)
 	if (opp >= 1)
 		opp = opp - 1;
 #endif
@@ -458,7 +459,7 @@ static int mtk_clk_rate_change(struct notifier_block *nb,
 	const char *clk_name = __clk_get_name(hw->clk);
 	int vcore_opp = get_sw_req_vcore_opp();
 
-	if (flags == PRE_RATE_CHANGE) {
+	if (flags == PRE_RATE_CHANGE && clk_name) {
 		warn_vcore(vcore_opp, clk_name,
 			ndata->new_rate, mtk_mux2id(&clk_name));
 	}
@@ -634,9 +635,6 @@ static void __init init_custom_cmds(void)
 
 static int __init clkdbg_mt6885_init(void)
 {
-	if (!of_machine_is_compatible("mediatek,MT6885"))
-		return -ENODEV;
-
 	init_regbase();
 
 	init_custom_cmds();

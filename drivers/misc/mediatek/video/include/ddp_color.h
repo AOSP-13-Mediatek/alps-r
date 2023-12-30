@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -359,5 +360,8 @@ bool disp_color_reg_get(enum DISP_MODULE_ENUM module, unsigned long addr,
 			unsigned int *value);
 extern int disp_color_ioctl(enum DISP_MODULE_ENUM module, unsigned int msg,
 			unsigned long arg, void *cmdq);
+#if defined(CONFIG_MACH_MT6785)
+void mtk_color_setbypass(enum DISP_MODULE_ENUM module, bool bypass);
+#endif
 
 #endif

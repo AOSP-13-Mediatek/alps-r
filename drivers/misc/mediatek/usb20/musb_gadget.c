@@ -2,6 +2,7 @@
  * MUSB OTG driver peripheral support
  *
  * Copyright 2005 Mentor Graphics Corporation
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Copyright (C) 2005-2006 by Texas Instruments
  * Copyright (C) 2006-2007 Nokia Corporation
  * Copyright (C) 2009 MontaVista Software, Inc. <source@mvista.com>
@@ -1443,8 +1444,8 @@ static int musb_gadget_enable
 		goto fail;
 
 	/* REVISIT this rules out high bandwidth periodic transfers */
-	tmp = usb_endpoint_maxp(desc);
-	if (tmp & ~0x07ff) {
+	tmp = usb_endpoint_maxp_mult(desc) - 1;
+	if (tmp) {
 		int ok;
 
 		if (usb_endpoint_dir_in(desc))
@@ -1456,12 +1457,12 @@ static int musb_gadget_enable
 			DBG(2, "no support for high bandwidth ISO\n");
 			goto fail;
 		}
-		musb_ep->hb_mult = (tmp >> 11) & 3;
+		musb_ep->hb_mult = tmp;
 	} else {
 		musb_ep->hb_mult = 0;
 	}
 
-	musb_ep->packet_sz = tmp & 0x7ff;
+	musb_ep->packet_sz = usb_endpoint_maxp(desc) & 0x7ff;
 	tmp = musb_ep->packet_sz * (musb_ep->hb_mult + 1);
 
 	/* enable the interrupts for the endpoint, set the endpoint

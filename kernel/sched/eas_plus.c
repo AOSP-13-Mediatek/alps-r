@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -1193,7 +1194,8 @@ static int find_energy_efficient_cpu_enhanced(struct task_struct *p,
 				continue;
 
 			/* Always use prev_cpu as a candidate. */
-			if (cpu == prev_cpu) {
+			if (cpu == prev_cpu &&
+			    (!prefer_idle || (prefer_idle && idle_cpu(cpu)))) {
 				prev_energy = compute_energy_enhanced(p,
 								prev_cpu, sg);
 				prev_delta = prev_energy - base_energy_sg;
@@ -1215,8 +1217,6 @@ static int find_energy_efficient_cpu_enhanced(struct task_struct *p,
 
 			if (idle_cpu(cpu)) {
 				cpu_cap = capacity_orig_of(cpu);
-				if (boosted && cpu_cap < target_cap)
-					continue;
 				if (!boosted && cpu_cap > target_cap)
 					continue;
 				idle = idle_get_state(cpu_rq(cpu));

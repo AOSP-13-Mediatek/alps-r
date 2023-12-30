@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -158,7 +159,6 @@ struct cust_mt65xx_led {
 	char *name;
 	enum mt65xx_led_mode mode;
 	long data;
-	int led_bits;
 	struct PWM_config config_data;
 };
 

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
  * Copyright (c) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/kernel.h>
@@ -5366,6 +5367,10 @@ void cmdq_core_initialize(void)
 		if (thread_id != CMDQ_INVALID_THREAD)
 			cmdq_ctx.thread[thread_id].used = true;
 	}
+
+#ifdef CMDQ_SECURE_PATH_SUPPORT
+	cmdq_ctx.thread[CMDQ_SEC_IRQ_THREAD].used = true;
+#endif
 
 	for (index = 0; index < ARRAY_SIZE(cmdq_clients); index++)
 		if (!cmdq_clients[index])

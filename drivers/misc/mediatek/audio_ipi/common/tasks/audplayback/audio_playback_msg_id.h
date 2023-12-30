@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -43,6 +44,7 @@ enum {
 	AUDIO_DSP_TASK_RESET,
 	AUDIO_DSP_TASK_DL_CONSUME_DATA,
 	AUDIO_DSP_TASK_UL_UPDATE_LATENCY,
+	AUDIO_DSP_TASK_UPDATE_UL_PIPE_LATENCY,
 	AUDIO_DSP_TASK_PCMDUMP_ON = 0x100,
 	AUDIO_DSP_TASK_PCMDUMP_DATA,
 	AUDIO_DSP_TASK_PCMDUMP_OK,

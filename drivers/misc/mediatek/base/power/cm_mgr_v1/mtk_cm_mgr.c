@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -826,8 +827,7 @@ PROC_FOPS_RO(dbg_cm_mgr_status);
 
 void __weak dbg_cm_mgr_platform_show(struct seq_file *m) {}
 
-void __weak dbg_cm_mgr_platform_write(int len, char *cmd, u32 val_1, u32 val_2)
-{}
+void __weak dbg_cm_mgr_platform_write(int len, const char *cmd, u32 val_1, u32 val_2) {}
 
 #ifdef USE_CPU_TO_DRAM_MAP_NEW
 void cm_mgr_cpu_map_update_table(void)

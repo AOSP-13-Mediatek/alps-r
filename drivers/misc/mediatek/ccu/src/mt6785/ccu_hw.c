@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -146,7 +147,7 @@ while (1) {
 	mailboxRet = mailbox_receive_cmd(&receivedCcuCmd);
 
 	if (mailboxRet == MAILBOX_QUEUE_EMPTY) {
-		LOG_DBG_MUST("MAIL_BOX IS EMPTY");
+		LOG_DBG("MAIL_BOX IS EMPTY");
 		goto ISR_EXIT;
 	}
 

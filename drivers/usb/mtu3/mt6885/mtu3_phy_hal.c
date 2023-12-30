@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -21,7 +22,7 @@
 #include "mtu3.h"
 #include "mtu3_priv.h"
 
-#define VCORE_OPP 1
+#define VCORE_OPP 0
 
 static struct phy *mtk_phy;
 static struct pm_qos_request vcore_pm_qos;
@@ -129,6 +130,11 @@ bool ssusb_u3loop_back_test(struct ssusb_mtk *ssusb)
 	clk_disable_unprepare(ssusb->sys_clk);
 
 	return ret;
+}
+
+void ssusb_set_phy_mode(int speed)
+{
+	/* do nothing */
 }
 
 void phy_hal_init(struct phy *phy)

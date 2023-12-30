@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
  * Copyright 2020 Google LLC
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/blk-crypto.h>
@@ -25,10 +26,11 @@ void mmc_crypto_free_host(struct mmc_host *host)
 
 void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
 {
-	struct request *req = mqrq->req;
 #ifdef CONFIG_MTK_EMMC_HW_CQ
+	struct request *req = mqrq->req;
 	struct mmc_request *mrq = &(mqrq->cmdq_req.mrq);
 #else /* let BUG() if SW-CQHCI run to here */
+	struct request *req = NULL;
 	struct mmc_request *mrq = NULL;
 #endif
 	const struct bio_crypt_ctx *bc;

@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2015 MediaTek Inc.
+# Copyright (C) 2020 XiaoMi, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -13,6 +14,11 @@
 #
 # Makefile for misc devices that really don't fit anywhere else.
 #
+
+ifneq ($(findstring "k6889v1_64", $(CONFIG_ARCH_MTK_PROJECT)),)
+subdir-ccflags-y += -D_XIAOMI_CEZANNE_
+endif
+
 MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 ARCH_MTK_PROJECT := $(subst ",,$(CONFIG_ARCH_MTK_PROJECT))
 IMGSENSOR_DRIVER_PATH  := $(srctree)/drivers/misc/mediatek/imgsensor/src
@@ -68,3 +74,7 @@ endif
 subdir-ccflags-y += -DSENSOR_PARALLEISM
 
 obj-y += seninf/
+
+ifeq ($(ARCH_MTK_PROJECT), k6889v1_64)
+subdir-ccflags-y += -DNEED_LATE_INITCALL
+endif

@@ -32,6 +32,13 @@ enum {
 	QOS_IPI_SETUP_GPU_INFO,
 	QOS_IPI_SWPM_SET_UPDATE_CNT,
 	QOS_IPI_QOS_SHARE_INIT,
+	QOS_IPI_QOS_PREFETCH_CB,
+	QOS_IPI_QOS_PREFETCH_FORCE,
+	QOS_IPI_QOS_PREFETCH_UPDATE,
+	QOS_IPI_QOS_PREFETCH_ENABLE,
+	QOS_IPI_QOS_PREFETCH_CPU_OPP,
+	QOS_IPI_QOS_PREFETCH_POWER_RATIO_UP,
+	QOS_IPI_QOS_PREFETCH_POWER_RATIO_DN,
 
 	NR_QOS_IPI,
 };
@@ -93,6 +100,21 @@ struct qos_ipi_data {
 			unsigned int dram_addr;
 			unsigned int dram_size;
 		} qos_share_init;
+		struct {
+			unsigned int state;
+		} qos_prefetch_cb;
+		struct {
+			unsigned int enable;
+		} qos_prefetch_enable;
+		struct {
+			unsigned int force;
+		} qos_prefetch_force;
+		struct {
+			unsigned int update;
+		} qos_prefetch_update;
+		struct {
+			unsigned int val;
+		} qos_prefetch_setting;
 		struct {
 			unsigned int arg[5];
 		} max;

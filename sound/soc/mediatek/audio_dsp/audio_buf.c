@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 //
 // Copyright (C) 2018 MediaTek Inc.
+// Copyright (C) 2021 XiaoMi, Inc.
 
 /* linux include path*/
 #if defined(__linux__)
@@ -513,12 +514,7 @@ int set_audiobuffer_threshold(struct audio_hw_buffer *audio_hwbuf,
 		substream->runtime->stop_threshold;
 	audio_hwbuf->aud_buffer.period_size = substream->runtime->period_size;
 	audio_hwbuf->aud_buffer.period_count = substream->runtime->periods;
-	AUD_LOG_D(
-		"start_threshold = %u stop_threshold = %u period_size = %d period_count = %d\n",
-		audio_hwbuf->aud_buffer.start_threshold,
-		audio_hwbuf->aud_buffer.stop_threshold,
-		audio_hwbuf->aud_buffer.period_size,
-		audio_hwbuf->aud_buffer.period_count);
+
 	return ret;
 }
 
@@ -550,13 +546,6 @@ int set_audiobuffer_attribute(struct audio_hw_buffer *audio_hwbuf,
 	audio_hwbuf->aud_buffer.buffer_attr.format = params_format(params);
 	audio_hwbuf->aud_buffer.buffer_attr.rate = params_rate(params);
 	audio_hwbuf->aud_buffer.buffer_attr.direction = direction;
-
-	AUD_LOG_D("%s ch = %u fmt = %u rate = %u dir = %d\n",
-		  __func__,
-		  audio_hwbuf->aud_buffer.buffer_attr.channel,
-		  audio_hwbuf->aud_buffer.buffer_attr.format,
-		  audio_hwbuf->aud_buffer.buffer_attr.rate,
-		  audio_hwbuf->aud_buffer.buffer_attr.direction);
 
 	return ret;
 }

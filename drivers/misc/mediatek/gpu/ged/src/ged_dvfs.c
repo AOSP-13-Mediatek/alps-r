@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -195,7 +196,7 @@ static int ged_get_dvfs_loading_mode(void);
 static int gx_tb_dvfs_margin = GED_DVFS_TIMER_BASED_DVFS_MARGIN;
 static int gx_tb_dvfs_margin_cur = GED_DVFS_TIMER_BASED_DVFS_MARGIN;
 #ifdef GED_ENABLE_TIMER_BASED_DVFS_MARGIN
-#define MAX_TB_DVFS_MARGIN               99
+#define MAX_TB_DVFS_MARGIN               70
 #define MIN_TB_DVFS_MARGIN               10
 #define MIN_TB_MARGIN_INC_STEP           1
 #define CONFIGURE_TIMER_BASED_MODE       0x00000000
@@ -2111,7 +2112,7 @@ GED_ERROR ged_dvfs_probe_signal(int signo)
 	}
 
 	if (t != NULL) {
-		send_sig_info(signo, &info, t);
+		/* send_sig_info(signo, &info, t); */
 		return GED_OK;
 	} else {
 		g_probe_pid = GED_NO_UM_SERVICE;

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -49,6 +50,7 @@ void fpsgo_base2fbt_set_min_cap(struct render_info *thr, int min_cap);
 void fpsgo_base2fbt_clear_llf_policy(struct render_info *thr,
 						int orig_policy);
 void fpsgo_base2fbt_cancel_jerk(struct render_info *thr);
+int fpsgo_base2fbt_is_finished(struct render_info *thr);
 
 int __init fbt_cpu_init(void);
 void __exit fbt_cpu_exit(void);
@@ -91,6 +93,7 @@ static inline void fpsgo_base2fbt_set_min_cap(struct render_info *thr,
 static inline void fpsgo_base2fbt_clear_llf_policy(struct render_info *thr,
 				int orig_policy) { }
 static inline void fpsgo_base2fbt_cancel_jerk(struct render_info *thr) { }
+static inline int fpsgo_base2fbt_is_finished(struct render_info *thr) { return 0; }
 
 #endif
 

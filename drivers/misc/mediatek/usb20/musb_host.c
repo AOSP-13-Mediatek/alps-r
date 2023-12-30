@@ -2,6 +2,7 @@
  * MUSB OTG driver host support
  *
  * Copyright 2005 Mentor Graphics Corporation
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Copyright (C) 2005-2006 by Texas Instruments
  * Copyright (C) 2006-2007 Nokia Corporation
  * Copyright (C) 2008-2009 MontaVista Software, Inc. <source@mvista.com>
@@ -2897,7 +2898,7 @@ static int
 	 * we don't (yet!) support high bandwidth interrupt transfers.
 	 */
 	if (qh->type == USB_ENDPOINT_XFER_ISOC) {
-		qh->hb_mult = 1 + ((qh->maxpacket >> 11) & 0x03);
+		qh->hb_mult = usb_endpoint_maxp_mult(epd);
 		if (qh->hb_mult > 1) {
 			int ok = (qh->type == USB_ENDPOINT_XFER_ISOC);
 

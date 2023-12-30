@@ -244,6 +244,7 @@ page_owner=on loop.max_part=7";
 			     <&level_vpu_core0 &level_vpu_core1>,
 			     <&level_vpu_core2>,
 			     <&level_mtk_mdla0 &level_mtk_mdla1>,
+			     <&level_edma0 &level_edma1>,
 			     <&level_mali0 &level_mali1 &level_mali2>,
 			     <&level_mali3 &level_mali4>,
 			     <&level_i2c0>;
@@ -1902,8 +1903,10 @@ page_owner=on loop.max_part=7";
 			 <0x08b4 0x00000002 1>;
 		fbksel = <0x070c 0x00000040 6>,
 			 <0x070c 0x00000040 6>;
-		dqopen = <0x0870 0x00100000 20>,
+		dqsopen = <0x0870 0x00100000 20>,
 			 <0x0870 0x00100000 20>;
+		dqopen = <0x0870 0x00200000 21>,
+			 <0x0870 0x00200000 21>;
 	};
 
 	dramc_ch0_top0@10230000 {
@@ -4155,8 +4158,10 @@ page_owner=on loop.max_part=7";
 			<&gce_mbox 5 CMDQ_NO_TIMEOUT CMDQ_THR_PRIO_2>,
 #if defined(CONFIG_MTK_SEC_VIDEO_PATH_SUPPORT)
 			<&gce_mbox 4 0 CMDQ_THR_PRIO_4>,
-			<&gce_mbox 6 0 CMDQ_THR_PRIO_3>,
-			<&gce_mbox_sec 8 0 CMDQ_THR_PRIO_3>;
+			<&gce_mbox 6 0 CMDQ_THR_PRIO_4>,
+			<&gce_mbox_sec 8 0 CMDQ_THR_PRIO_3>,
+			<&gce_mbox_sec 9 0 CMDQ_THR_PRIO_3>,
+			<&gce_mbox_sec 9 0 CMDQ_THR_PRIO_3>;
 #else
 			<&gce_mbox 4 0 CMDQ_THR_PRIO_4>,
 			<&gce_mbox 6 0 CMDQ_THR_PRIO_3>;
@@ -4170,7 +4175,9 @@ page_owner=on loop.max_part=7";
 #if defined(CONFIG_MTK_SEC_VIDEO_PATH_SUPPORT)
 			"CLIENT_SUB_CFG0",
 			"CLIENT_DSI_CFG0",
-			"CLIENT_SEC_CFG0";
+			"CLIENT_SEC_CFG0",
+			"CLIENT_SEC_CFG1",
+			"CLIENT_SEC_CFG2";
 #else
 			"CLIENT_SUB_CFG0",
 			"CLIENT_DSI_CFG0";

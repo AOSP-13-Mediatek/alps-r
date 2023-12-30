@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -807,7 +808,7 @@ static void port_dump_string(struct port_t *port, int dir,
 				"[%02X]", char_ptr[i]);
 			j += 4;
 		}
-		if (ret < 0 || ret >= DUMP_BUF_SIZE - j) {
+		if (ret < 0) {
 			CCCI_ERROR_LOG(port->md_id, TAG,
 				"%s-%d:snprintf fail,ret = %d\n", __func__, __LINE__, ret);
 			break;

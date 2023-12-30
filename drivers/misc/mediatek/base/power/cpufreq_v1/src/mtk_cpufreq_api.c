@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -73,10 +74,12 @@ unsigned int mt_cpufreq_find_close_freq(unsigned int cluster_id,
 {
 	enum mt_cpu_dvfs_id id = (enum mt_cpu_dvfs_id) cluster_id;
 	struct mt_cpu_dvfs *p = id_to_cpu_dvfs(id);
-	int idx = _search_available_freq_idx(p, freq, CPUFREQ_RELATION_L);
+	int idx;
 
 	if (p == NULL)
 		return 0;
+
+	idx = _search_available_freq_idx(p, freq, CPUFREQ_RELATION_L);
 	if (idx < 0)
 		idx = 0;
 

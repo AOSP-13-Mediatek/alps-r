@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -44,13 +45,19 @@
 #define APUSYS_SETTLE_TIME_TEST (0)
 #define VOLTAGE_RAISE_UP	    (1)
 #define SUPPORT_VCORE_TO_IPUIF	(1)
+#define BINNING_UT		(0)	// for mt6893 local only, DO NOT COMMIT!
 
+#if defined(CONFIG_MACH_MT6893)
+#define APUSYS_MAX_NUM_OPPS                (6)
+#else
 #define APUSYS_MAX_NUM_OPPS                (10)
+#endif
+
 #define APUSYS_PATH_USER_NUM               (4)   // num of DVFS_XXX_PATH
 #define APUSYS_DVFS_CONSTRAINT_NUM			(4)
 #define APUSYS_VPU_NUM						(3)
 #define APUSYS_MDLA_NUM						(2)
-#define APUSYS_DEFAULT_OPP					(9)
+#define APUSYS_DEFAULT_OPP			(APUSYS_MAX_NUM_OPPS - 1)
 
 #define VOLTAGE_CHECKER		(0)
 
@@ -65,8 +72,18 @@
 #define VMDLA_SHUTDOWN_VOLT	DVFS_VOLT_00_575000_V
 #define VSRAM_SHUTDOWN_VOLT	DVFS_VOLT_00_750000_V
 
+#if defined(CONFIG_MACH_MT6893)
+#define BUCK_VVPU_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_273000_F
+#define BUCK_VMDLA_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_280000_F
+#define BUCK_VCONN_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#define BUCK_VIOMMU_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#else
+#define BUCK_VVPU_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#define BUCK_VMDLA_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#define BUCK_VCONN_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#define BUCK_VIOMMU_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
+#endif
 
-#define BUCK_DOMAIN_DEFAULT_FREQ DVFS_FREQ_00_208000_F
 #define VCORE_ON_FREQ		DVFS_FREQ_00_273000_F
 #define VCORE_OFF_FREQ		DVFS_FREQ_00_026000_F
 
@@ -132,6 +149,11 @@ struct apusys_dvfs_constraint {
 	enum DVFS_VOLTAGE voltage1;
 };
 
+struct apusys_aging_steps {
+	enum DVFS_FREQ freq;
+	int volt;
+};
+
 #if SUPPORT_VCORE_TO_IPUIF
 struct ipuif_opp_table {
 	unsigned int ipuif_khz;
@@ -188,12 +210,23 @@ extern bool buck_shared[APUSYS_BUCK_NUM]
 extern struct apusys_dvfs_constraint dvfs_constraint_table
 					[APUSYS_DVFS_CONSTRAINT_NUM];
 extern enum DVFS_VOLTAGE vcore_opp_mapping[];
+
+#if !defined(CONFIG_MACH_MT6893)
 extern struct apusys_dvfs_steps dvfs_table_0[APUSYS_MAX_NUM_OPPS]
 						[APUSYS_BUCK_DOMAIN_NUM];
 extern struct apusys_dvfs_steps dvfs_table_1[APUSYS_MAX_NUM_OPPS]
 						[APUSYS_BUCK_DOMAIN_NUM];
 extern struct apusys_dvfs_steps dvfs_table_2[APUSYS_MAX_NUM_OPPS]
 						[APUSYS_BUCK_DOMAIN_NUM];
+#else
+extern struct apusys_dvfs_steps dvfs_table_b0[APUSYS_MAX_NUM_OPPS]
+						[APUSYS_BUCK_DOMAIN_NUM];
+extern struct apusys_dvfs_steps dvfs_table_b1[APUSYS_MAX_NUM_OPPS]
+						[APUSYS_BUCK_DOMAIN_NUM];
+extern struct apusys_aging_steps aging_tbl_b0[APUSYS_MAX_NUM_OPPS][V_VCORE];
+extern struct apusys_aging_steps aging_tbl_b1[APUSYS_MAX_NUM_OPPS][V_VCORE];
+#endif
+
 #if SUPPORT_VCORE_TO_IPUIF
 extern struct ipuif_opp_table g_ipuif_opp_table[];
 #endif

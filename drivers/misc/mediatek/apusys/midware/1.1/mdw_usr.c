@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -995,6 +996,8 @@ void mdw_usr_destroy(struct mdw_usr *u)
 	struct mdw_mem *mm = NULL;
 	struct mdw_apu_cmd *c = NULL;
 	struct mdw_dev_info *d = NULL;
+	uint64_t sbmp = 0;
+	int nd_type = 0;
 
 	mutex_lock(&u_mgr.mtx);
 	mutex_lock(&u->mtx);
@@ -1015,13 +1018,22 @@ void mdw_usr_destroy(struct mdw_usr *u)
 
 	list_for_each_safe(list_ptr, tmp, &u->sdev_list) {
 		d = list_entry(list_ptr, struct mdw_dev_info, u_item);
+		if (d->type >= APUSYS_DEVICE_MAX) {
+			mdw_drv_err("known device type(%d)\n", d->type);
+			continue;
+		}
+		/* disable secure mode */
+		nd_type = d->type % APUSYS_DEVICE_RT;
+		if (!((1ULL << nd_type) & sbmp)) {
+			sbmp |= (1ULL << nd_type);
+			d->sec_off(d);
+			mdw_drv_warn("dev(%d/%d) sec off\n", nd_type, d->type);
+		}
 		list_del(&d->u_item);
 		mdw_drv_warn("residual dev(%s%d)\n", d->name, d->idx);
 		d->pwr_off(d);
 		mdw_rsc_put_dev(d);
 	}
-	if (d)
-		d->sec_off(d);
 
 	mutex_unlock(&u->mtx);
 	list_del(&u->m_item);

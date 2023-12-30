@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Copyright (c) 2020 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #ifndef ADSP_CLK_H
@@ -18,6 +19,11 @@ enum adsp_clk {
 	CLK_TOP_CLK26M,
 	CLK_TOP_ADSPPLL,
 	ADSP_CLK_NUM
+};
+
+enum scp_clk {
+	CLK_TOP_SCP_SEL,
+	SCP_CLK_NUM
 };
 
 void adsp_set_clock_freq(enum adsp_clk clk);

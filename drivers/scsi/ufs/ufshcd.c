@@ -3,6 +3,7 @@
  *
  * This code is based on drivers/scsi/ufs/ufshcd.c
  * Copyright (C) 2011-2013 Samsung India Software Operations
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
  *
  * Authors:
@@ -246,6 +247,8 @@ static struct ufs_dev_fix ufs_fixups[] = {
 	UFS_FIX(UFS_VENDOR_SKHYNIX, UFS_ANY_MODEL, UFS_DEVICE_NO_VCCQ),
 	UFS_FIX(UFS_VENDOR_SKHYNIX, UFS_ANY_MODEL,
 		UFS_DEVICE_QUIRK_HOST_PA_SAVECONFIGTIME),
+	UFS_FIX(UFS_VENDOR_MICRON, UFS_ANY_MODEL,
+		UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM),
 
 	/* MTK PATCH */
 	UFS_FIX(UFS_VENDOR_SKHYNIX, UFS_ANY_MODEL,
@@ -4799,7 +4802,9 @@ static inline void ufshcd_hba_stop(struct ufs_hba *hba, bool can_sleep)
 int ufshcd_hba_enable(struct ufs_hba *hba)
 {
 	int retry;
+	bool retry_reset = false;
 
+hba_retry:
 	/*
 	 * msleep of 1 and 5 used in this function might result in msleep(20),
 	 * but it was necessary to send the UFS FPGA to reset mode during
@@ -4843,7 +4848,12 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
 			ufs_mtk_pltfrm_host_sw_rst(hba,
 				SW_RST_TARGET_UFSHCI |
 				SW_RST_TARGET_UFSCPT | SW_RST_TARGET_UNIPRO);
-			return -EIO;
+			/* try again after sw reset*/
+			if (!retry_reset) {
+				retry_reset = true;
+				goto hba_retry;
+			} else
+				return -EIO;
 		}
 		usleep_range(1000, 1100);
 	}
@@ -8080,6 +8090,8 @@ out:
 	trace_ufshcd_init(dev_name(hba->dev), ret,
 		ktime_to_us(ktime_sub(ktime_get(), start)),
 		hba->curr_dev_pwr_mode, hba->uic_link_state);
+
+
 	return ret;
 }
 
@@ -8935,6 +8947,7 @@ static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba)
 static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
 {
 	int ret = 0;
+	bool tw_buf_need_flush = false;
 	enum ufs_pm_level pm_lvl;
 	enum ufs_dev_pwr_mode req_dev_pwr_mode;
 	enum uic_link_state req_link_state;
@@ -9011,11 +9024,12 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
 	}
 
 #if defined(CONFIG_UFSFEATURE) && defined(CONFIG_UFSTW)
-	if (ufstw_need_flush(&hba->ufsf)) {
+	tw_buf_need_flush = ufstw_need_flush(&hba->ufsf);
+	if (tw_buf_need_flush) {
 		ret = -EAGAIN;
 		pm_runtime_mark_last_busy(hba->dev);
 		goto enable_gating;
-	}
+	} 
 #endif
 
 	/* MTK PATCH */

@@ -3,6 +3,7 @@
  * drivers/staging/android/ion/ion.c
  *
  * Copyright (C) 2011 Google, Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -1129,13 +1130,13 @@ void ion_client_destroy(struct ion_client *client)
 						     node);
 
 		mutex_lock(&client->lock);
-		IONMSG("%s:hdl=%p,buf=%p,sz=%zu,ref=%d,kmp=%d\n",
+		IONMSG(
+		       "%s:hdl=%p,buf=%p,sz=%zu,ref=%d,kmp=%d, client=%s,disp=%s,dbg=%s\n",
 		       __func__, handle, handle->buffer,
 		       handle->buffer->size,
 		       atomic_read(&handle->buffer->ref.refcount.refs),
-		       handle->buffer->kmap_cnt);
-		IONMSG("%s:client=%s,disp=%s,dbg=%s\n",
-		       __func__, client->name ? client->name : NULL,
+		       handle->buffer->kmap_cnt,
+		       client->name ? client->name : NULL,
 		       client->display_name ? client->display_name : NULL,
 		       client->dbg_name);
 		ion_handle_destroy(&handle->ref);
@@ -1329,11 +1330,12 @@ static void ion_dma_buf_detatch(struct dma_buf *dmabuf,
 		IONMSG("%s not dma buf device\n", __func__);
 		return;
 	}
+	
 
-	free_duped_table(a->table);
 	mutex_lock(&buffer->lock);
 	list_del(&a->list);
 	mutex_unlock(&buffer->lock);
+	free_duped_table(a->table);
 
     //pr_notice("%s, %d\n", __func__, __LINE__);
 	kfree(a);
@@ -1420,7 +1422,6 @@ retry:
 					      buffer,
 					      &addr,
 					      &len);
-
 		if (ret) {
 			mutex_unlock(&buffer->lock);
 			IONMSG("%s, failed at get phys, ret:%d\n",
@@ -1676,7 +1677,7 @@ static int ion_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
 	}
 	if (ion_iommu_heap_type(buffer) ||
 	    buffer->heap->type == (int)ION_HEAP_TYPE_SYSTEM) {
-		IONMSG("%s iommu device, to cache sync\n", __func__);
+		IONDBG("%s iommu device, to cache sync\n", __func__);
 
 		mutex_lock(&buffer->lock);
 		list_for_each_entry(a, &buffer->attachments, list) {
@@ -1705,7 +1706,7 @@ static int ion_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
 
 	if (ion_iommu_heap_type(buffer) ||
 	    buffer->heap->type == (int)ION_HEAP_TYPE_SYSTEM) {
-		IONMSG("%s iommu device, to cache sync\n", __func__);
+		IONDBG("%s iommu device, to cache sync\n", __func__);
 
 		mutex_lock(&buffer->lock);
 		list_for_each_entry(a, &buffer->attachments, list) {

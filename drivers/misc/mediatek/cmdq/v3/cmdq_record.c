@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
  * Copyright (c) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/sched/clock.h>
@@ -1814,6 +1815,13 @@ s32 cmdq_op_read_reg_to_mem(struct cmdqRecStruct *handle,
 
 	if (!handle)
 		return -EINVAL;
+
+#ifdef CMDQ_SECURE_PATH_SUPPORT
+	if (cmdq_task_is_secure(handle)) {
+		CMDQ_ERR("%s secure handle\n", __func__);
+		return -EINVAL;
+	}
+#endif
 
 	do {
 		status = cmdq_op_read_reg(handle, addr,

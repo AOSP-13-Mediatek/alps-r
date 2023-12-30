@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -1392,6 +1393,9 @@ static void get_volt_table_in_thread(struct eem_det *det)
 
 	ndet = (det->loo_role == HIGH_BANK) ?
 		id_to_eem_det(det->loo_couple) : det;
+	if (ndet == NULL)
+		return;
+
 #endif
 	eem_debug("@@! In %s\n", __func__);
 	read_volt_from_VOP(det);
@@ -1893,6 +1897,8 @@ static int eem_volt_thread_handler(void *data)
 #endif
 
 	FUNC_ENTER(FUNC_LV_HELP);
+	if (det == NULL)
+		return 0;
 
 	do {
 		eem_debug("In thread handler\n");

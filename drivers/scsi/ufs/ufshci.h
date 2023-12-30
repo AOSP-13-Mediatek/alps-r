@@ -3,6 +3,7 @@
  *
  * This code is based on drivers/scsi/ufs/ufshci.h
  * Copyright (C) 2011-2013 Samsung India Software Operations
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Authors:
  *	Santosh Yaraganavi <santosh.sy@samsung.com>
@@ -75,13 +76,12 @@ enum {
 	REG_UIC_COMMAND_ARG_2			= 0x98,
 	REG_UIC_COMMAND_ARG_3			= 0x9C,
 
+	UFSHCI_REG_SPACE_SIZE			= 0xA0,
+
 	REG_UFS_CCAP				= 0x100,
 	REG_UFS_CRYPTOCAP			= 0x104,
 
-	UFSHCI_REG_SPACE_SIZE			= 0xA0,
-
 	/* MTK PATCH */
-	UFS_REG_CRYPTO_CAPABILITY		= 0x100,
 	REG_UFS_ADDR_XOUFS_ST			= 0x144,
 
 	/* MTK PATCH: vendor-specific registers */

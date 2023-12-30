@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -850,7 +851,7 @@ struct charger_device *charger_device_register(const char *name,
 	chg_dev->dev.parent = parent;
 	chg_dev->dev.release = charger_device_release;
 	charger_name = kasprintf(GFP_KERNEL, "%s", name);
-	dev_set_name(&chg_dev->dev, "%s", charger_name);
+	dev_set_name(&chg_dev->dev, charger_name);
 	dev_set_drvdata(&chg_dev->dev, devdata);
 	kfree(charger_name);
 

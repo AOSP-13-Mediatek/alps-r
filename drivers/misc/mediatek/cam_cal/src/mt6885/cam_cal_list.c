@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2018 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
+ * Copyright (C) 2020 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -20,6 +22,7 @@
 
 struct stCAM_CAL_LIST_STRUCT g_camCalList[] = {
 	/*Below is commom sensor */
+#if 0
 	{IMX586_SENSOR_ID, 0xA0, Common_read_region, MAX_EEPROM_SIZE_16K},
 	{IMX576_SENSOR_ID, 0xA2, Common_read_region},
 	{IMX519_SENSOR_ID, 0xA0, Common_read_region},
@@ -35,8 +38,11 @@ struct stCAM_CAL_LIST_STRUCT g_camCalList[] = {
 	{IMX350_SENSOR_ID, 0xA0, Common_read_region},
 	{IMX386_MONO_SENSOR_ID, 0xA0, Common_read_region},
 	{IMX499_SENSOR_ID, 0xA0, Common_read_region},
-	{S5KJD1_SENSOR_ID, 0xB0, Common_read_region, DEFAULT_MAX_EEPROM_SIZE_8K,
-		DW9763_write_region},
+#endif
+	{IMX682SUNNY_SENSOR_ID, 0xA0, Common_read_region},
+	{S5K3T2SUNNY_SENSOR_ID, 0xA8, Common_read_region},
+	{S5K5E9SUNNY_SENSOR_ID, 0xA4, Common_read_region},
+	{HI1337SUNNY_SENSOR_ID, 0xA2, Common_read_region},
 	/*  ADD before this line */
 	{0, 0, 0}       /*end of list */
 };

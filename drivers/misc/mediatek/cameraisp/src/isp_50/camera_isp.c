@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -1488,7 +1489,19 @@ static int ISP_ReadReg(struct ISP_REG_IO_STRUCT *pRegIo)
 
 	/*  */
 	struct ISP_REG_STRUCT reg;
-	struct ISP_REG_STRUCT *pData = (struct ISP_REG_STRUCT *)pRegIo->pData;
+	struct ISP_REG_STRUCT *pData;
+
+	if (pRegIo == NULL) {
+		LOG_NOTICE("Error: NULL pRegIo\n");
+		return -EFAULT;
+	}
+
+	pData = (struct ISP_REG_STRUCT *)pRegIo->pData;
+
+	if (pData == NULL) {
+		LOG_NOTICE("Error: NULL pData\n");
+		return -EFAULT;
+	}
 
 	switch (pData->module) {
 	case ISP_CAM_A_IDX:
